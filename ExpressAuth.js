@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const port = 3000;
 
-const uri = "mongodb+srv://ExpressAccount:JvmdZ7svEXsLGfBn@cluster0.xheynkp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = "mongodb+srv://wesleyaustin2:1ci83VF1g3thllUC@cluster0.akis8d8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 app.listen(port);
 console.log('Server started at http://localhost:' + port);
@@ -57,8 +57,8 @@ app.post('/register', async function(req, res) {
   try {
     await client.connect();
 
-    const database = client.db('crlmdb');
-    const collection = database.collection('credentials');
+    const database = client.db('WesleyDB');
+    const collection = database.collection('users');
 
     // Insert user data into MongoDB
     await collection.insertOne({ userID, userPASS });
@@ -85,18 +85,18 @@ app.post('/login', async function(req, res) {
   try {
     await client.connect();
 
-    const database = client.db('crlmdb');
-    const collection = database.collection('credentials');
+    const database = client.db('WesleyDB');
+    const collection = database.collection('users');
 
     // Checks if the user exists in the database with the provided credentials
-    const user = await collection.findOne({ userID, userPASS });
+    const user = await collection.findOne({ login_username, login_password });
 
     if (user) {
       // If the user exists and credentials are valid, set a unique cookie (expires in 1 minute)
       res.cookie(userID, Date.now(), { maxAge: 60000 });
       
       // Log successful login
-      console.log("User logged in:", userID);
+      console.log("User logged in:", login_username);
 
       // Redirectss to a welcome page or dashboard
       res.sendFile(__dirname + '/Welcome.html');
